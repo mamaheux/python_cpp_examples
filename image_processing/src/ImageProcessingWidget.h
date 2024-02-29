@@ -16,7 +16,7 @@ class ImageProcessingWidget : public QWidget
     ImageOperationPluginManager& m_pluginManager;
 
 public:
-    explicit ImageProcessingWidget(ImageOperationPluginManager& pluginManager, QWidget *parent = nullptr);
+    explicit ImageProcessingWidget(ImageOperationPluginManager& pluginManager, QWidget* parent = nullptr);
     ~ImageProcessingWidget() override;
 
 private Q_SLOTS:

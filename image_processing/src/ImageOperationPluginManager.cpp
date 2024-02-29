@@ -10,7 +10,6 @@ constexpr const char* PLUGIN_FOLDER = "image_processing_plugins";
 
 ImageOperationPluginManager::ImageOperationPluginManager()
 {
-
     QDir pluginPath = QCoreApplication::applicationDirPath() + QDir::separator() + PLUGIN_FOLDER;
     if (!pluginPath.exists())
     {
@@ -100,5 +99,11 @@ QImage ImageOperationPluginManager::pyArrayToQImageCopy(const pybind11::array_t<
         return QImage();
     }
 
-    return QImage(bgrImage.data(), static_cast<int>(bgrImage.shape(1)), static_cast<int>(bgrImage.shape(0)), QImage::Format_RGB888).copy().rgbSwapped();
+    return QImage(
+               bgrImage.data(),
+               static_cast<int>(bgrImage.shape(1)),
+               static_cast<int>(bgrImage.shape(0)),
+               QImage::Format_RGB888)
+        .copy()
+        .rgbSwapped();
 }

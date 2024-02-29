@@ -8,8 +8,9 @@
 
 #include <QDebug>
 
-ImageProcessingWidget::ImageProcessingWidget(ImageOperationPluginManager& pluginManager, QWidget *parent)
-    : QWidget(parent), m_pluginManager(pluginManager)
+ImageProcessingWidget::ImageProcessingWidget(ImageOperationPluginManager& pluginManager, QWidget* parent)
+    : QWidget(parent),
+      m_pluginManager(pluginManager)
 {
     m_browseButton = new QPushButton("Browse");
     connect(m_browseButton, &QPushButton::clicked, this, &ImageProcessingWidget::onBrowseButtonClicked);
@@ -17,7 +18,11 @@ ImageProcessingWidget::ImageProcessingWidget(ImageOperationPluginManager& plugin
     m_operationComboBox = new QComboBox();
     m_operationComboBox->addItems(m_pluginManager.operationNames());
     // TODO add items
-    connect(m_operationComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &ImageProcessingWidget::onOperationComboBoxCurrentIndexChanged);
+    connect(
+        m_operationComboBox,
+        qOverload<int>(&QComboBox::currentIndexChanged),
+        this,
+        &ImageProcessingWidget::onOperationComboBoxCurrentIndexChanged);
 
     auto topLayout = new QHBoxLayout;
     topLayout->addWidget(m_browseButton);
@@ -44,9 +49,7 @@ ImageProcessingWidget::ImageProcessingWidget(ImageOperationPluginManager& plugin
     setLayout(globalLayout);
 }
 
-ImageProcessingWidget::~ImageProcessingWidget()
-{
-}
+ImageProcessingWidget::~ImageProcessingWidget() {}
 
 void ImageProcessingWidget::onBrowseButtonClicked(bool checked)
 {
@@ -86,6 +89,3 @@ void ImageProcessingWidget::updateAfterImage()
         m_afterImageDisplayWidget->setImage(QImage());
     }
 }
-
-
-
