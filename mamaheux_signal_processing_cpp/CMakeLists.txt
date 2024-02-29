@@ -3,7 +3,7 @@ project(mamaheux_signal_processing_cpp)
 
 find_package(pybind11 REQUIRED)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-march=native -Wall -ffast-math")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-march=native -ffast-math")
 
 pybind11_add_module(mamaheux_signal_processing_cpp src/main.cpp src/SignalStatistics.cpp src/Effects.cpp)
 

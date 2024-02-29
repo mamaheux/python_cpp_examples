@@ -106,7 +106,7 @@ SignalStatistics computeSignalStatisticsSimd(const py::array_t<float>& signal)
         __m256 maxVector = _mm256_set1_ps(std::numeric_limits<float>::min());
         __m256 sumVector = _mm256_set1_ps(0.f);
 
-        for (;i < (size - VECTOR_SIZE); i += VECTOR_SIZE)
+        for (; i < (size - VECTOR_SIZE); i += VECTOR_SIZE)
         {
             __m256 values = _mm256_load_ps(data + i);
             minVector = _mm256_min_ps(minVector, values);

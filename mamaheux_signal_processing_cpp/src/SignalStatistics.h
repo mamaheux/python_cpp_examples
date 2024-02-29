@@ -19,10 +19,6 @@ public:
     float mean() const { return m_mean; }
 };
 
-SignalStatistics computeSignalStatistics(const pybind11::array_t<float>& signal);
-
-std::unordered_map<uint8_t, size_t> computeHistogram(const pybind11::array_t<uint8_t>& grayImage);
-
 void initSignalStatisticsPythonModule(pybind11::module& m);
 
 #endif

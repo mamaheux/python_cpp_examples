@@ -32,7 +32,9 @@ def create_signals():
 
 def main():
     t, input_signal = create_signals()
-    output_signal = mamaheux_signal_processing_cpp.apply_compressor(input_signal, threshold=0.4, ratio=0.8, attack=0.99, release=0.9975)
+    output_signal = mamaheux_signal_processing_cpp.apply_compressor(input_signal,
+                                                                    threshold=0.4, ratio=0.8,
+                                                                    attack=0.99, release=0.9975)
 
     fig = plt.figure(figsize=(5, 5), dpi=300)
     ax1 = fig.add_subplot(111)
