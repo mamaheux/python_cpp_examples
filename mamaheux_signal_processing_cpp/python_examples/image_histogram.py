@@ -13,10 +13,7 @@ def main():
 
     fig = plt.figure(figsize=(5, 5), dpi=300)
     ax1 = fig.add_subplot(111)
-
     ax1.bar(values, counts)
-    ax1.legend()
-
     plt.show()
 
 

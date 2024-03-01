@@ -90,7 +90,6 @@ SignalStatistics computeSignalStatisticsSimd(const py::array_t<float>& signal)
 
     size_t startCount = (VECTOR_SIZE - ((reinterpret_cast<size_t>(data) / sizeof(float)) % VECTOR_SIZE)) % VECTOR_SIZE;
 
-    // OK
     size_t i = 0;
     for (; i < startCount; i++)
     {
