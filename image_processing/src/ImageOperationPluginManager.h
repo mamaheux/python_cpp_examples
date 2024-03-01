@@ -31,7 +31,7 @@ public:
     ImageOperationPluginManager(ImageOperationPluginManager&&) = delete;
     ImageOperationPluginManager& operator=(ImageOperationPluginManager&&) = delete;
 
-    QStringList operationNames() const;
+    [[nodiscard]] const QStringList& operationNames() const;
     std::optional<QImage> process(int i, const QImage& image);
 
 private:

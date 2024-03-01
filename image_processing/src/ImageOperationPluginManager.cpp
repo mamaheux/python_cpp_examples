@@ -44,7 +44,7 @@ ImageOperationPluginManager::ImageOperationPluginManager()
     }
 }
 
-QStringList ImageOperationPluginManager::operationNames() const
+const QStringList& ImageOperationPluginManager::operationNames() const
 {
     return m_operationNames;
 }
