@@ -51,7 +51,7 @@ const QStringList& ImageOperationPluginManager::operationNames() const
 
 std::optional<QImage> ImageOperationPluginManager::process(int i, const QImage& image)
 {
-    if (i >= m_operationFunctions.size())
+    if (i >= m_operationFunctions.size() || i < 0)
     {
         qWarning() << "Invalid process function index";
         return std::nullopt;
