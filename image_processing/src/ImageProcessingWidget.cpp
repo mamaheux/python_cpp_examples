@@ -17,7 +17,6 @@ ImageProcessingWidget::ImageProcessingWidget(ImageOperationPluginManager& plugin
 
     m_operationComboBox = new QComboBox();
     m_operationComboBox->addItems(m_pluginManager.operationNames());
-    // TODO add items
     connect(
         m_operationComboBox,
         qOverload<int>(&QComboBox::currentIndexChanged),
