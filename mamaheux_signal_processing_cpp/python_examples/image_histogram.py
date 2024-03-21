@@ -14,6 +14,8 @@ def main():
     fig = plt.figure(figsize=(6, 6), dpi=200)
     ax = fig.add_subplot(111)
     ax.bar(values, counts)
+    ax.set_xlabel('Pixel Value')
+    ax.set_ylabel('Count')
     plt.show()
 
 

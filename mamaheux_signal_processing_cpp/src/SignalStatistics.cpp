@@ -51,7 +51,6 @@ float sum8(__m256 x)
     return sum[0] + sum[1] + sum[2] + sum[3];
 }
 
-// Bug
 float min8(__m256 x)
 {
     __m128 loQuad = _mm256_extractf128_ps(x, 0);

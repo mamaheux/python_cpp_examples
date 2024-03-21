@@ -24,7 +24,8 @@ def compute_signal_statistics_python(signal):
 
     mean_value /= signal.shape[0]
 
-    return min_value, max_value, mean_value
+    return mamaheux_signal_processing_cpp.SignalStatistics(min_value, max_value, mean_value)
+
 
 def compute_signal_statistics_numpy(signal):
     if len(signal.shape) != 1:
@@ -34,17 +35,7 @@ def compute_signal_statistics_numpy(signal):
     max_value = np.max(signal)
     mean_value = np.mean(signal)
 
-    return min_value, max_value, mean_value
-
-
-def compute_signal_statistics_cpp(signal):
-    stats = mamaheux_signal_processing_cpp.compute_signal_statistics(signal)
-    return stats.min, stats.max, stats.mean
-
-
-def compute_signal_statistics_cpp_simd(signal):
-    stats = mamaheux_signal_processing_cpp.compute_signal_statistics_simd(signal)
-    return stats.min, stats.max, stats.mean
+    return mamaheux_signal_processing_cpp.SignalStatistics(min_value, max_value, mean_value)
 
 
 def bench(signals, function):
@@ -54,7 +45,7 @@ def bench(signals, function):
     for signal in signals:
         start_time = time.time()
         for c in range(1, N + 1):
-            _min_value, _max_value, _mean_value = function(signal)
+            _stats = function(signal)
         durations.append((time.time() - start_time) / N)
 
     return durations
@@ -74,10 +65,10 @@ def main():
     duration_numpy = bench(signals, compute_signal_statistics_numpy)
     ax.plot(sizes, duration_numpy, '-', label='Numpy')
 
-    duration_cpp = bench(signals, compute_signal_statistics_cpp)
+    duration_cpp = bench(signals, mamaheux_signal_processing_cpp.compute_signal_statistics)
     ax.plot(sizes, duration_cpp, '-', label='C++')
     if hasattr(mamaheux_signal_processing_cpp, 'compute_signal_statistics_simd'):
-        duration_cpp_simd = bench(signals, compute_signal_statistics_cpp_simd)
+        duration_cpp_simd = bench(signals, mamaheux_signal_processing_cpp.compute_signal_statistics_simd)
         ax.plot(sizes, duration_cpp_simd, '-', label='C++ SIMD')
 
     ax.legend()
