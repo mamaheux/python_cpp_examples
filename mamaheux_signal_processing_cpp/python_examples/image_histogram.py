@@ -11,9 +11,9 @@ def main():
     values = list(histogram.keys())
     counts = list(histogram.values())
 
-    fig = plt.figure(figsize=(5, 5), dpi=300)
-    ax1 = fig.add_subplot(111)
-    ax1.bar(values, counts)
+    fig = plt.figure(figsize=(6, 6), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.bar(values, counts)
     plt.show()
 
 

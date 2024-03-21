@@ -1,5 +1,7 @@
-import numpy as np
 import time
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 import mamaheux_signal_processing_cpp
 
@@ -40,34 +42,50 @@ def compute_signal_statistics_cpp(signal):
     return stats.min, stats.max, stats.mean
 
 
-
 def compute_signal_statistics_cpp_simd(signal):
     stats = mamaheux_signal_processing_cpp.compute_signal_statistics_simd(signal)
     return stats.min, stats.max, stats.mean
 
 
+def bench(signals, function):
+    N = 100
+    durations = []
 
-def bench(signal, function, name):
-    start_time = time.time()
-    min_value, max_value, mean_value = function(signal)
-    end_time = time.time()
+    for signal in signals:
+        start_time = time.time()
+        for c in range(1, N + 1):
+            _min_value, _max_value, _mean_value = function(signal)
+        durations.append((time.time() - start_time) / N)
 
-    print(name)
-    print(f'{min_value=}, {max_value=}, {mean_value=}')
-    print(f'Duration: {end_time-start_time} s')
-    print()
+    return durations
 
 
 def main():
-    N = 10000000
-    signal = np.random.rand(N).astype(np.float32)
+    fig = plt.figure(figsize=(6, 6), dpi=200)
+    ax = fig.add_subplot(111)
 
-    bench(signal, compute_signal_statistics_python, 'Python')
-    bench(signal, compute_signal_statistics_numpy, 'Numpy')
-    bench(signal, compute_signal_statistics_cpp, 'C++')
+    sizes = np.linspace(100, 1000000, 100, dtype=int)
+    signals = [np.random.rand(size).astype(np.float32) for size in sizes]
+
+    python_count = 10
+    duration_python = bench(signals[:python_count], compute_signal_statistics_python)
+    ax.plot(sizes[:python_count], duration_python, '-', label='Python')
+
+    duration_numpy = bench(signals, compute_signal_statistics_numpy)
+    ax.plot(sizes, duration_numpy, '-', label='Numpy')
+
+    duration_cpp = bench(signals, compute_signal_statistics_cpp)
+    ax.plot(sizes, duration_cpp, '-', label='C++')
     if hasattr(mamaheux_signal_processing_cpp, 'compute_signal_statistics_simd'):
-        bench(signal, compute_signal_statistics_cpp_simd, 'C++ SIMD')
+        duration_cpp_simd = bench(signals, compute_signal_statistics_cpp_simd)
+        ax.plot(sizes, duration_cpp_simd, '-', label='C++ SIMD')
 
+    ax.legend()
+    ax.set_yscale('log')
+    ax.set_xlabel('Signal Size')
+    ax.set_ylabel('Duration (s)')
+    ax.grid(True, which='both')
+    plt.show()
 
 if __name__ == "__main__":
     main()

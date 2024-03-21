@@ -36,12 +36,14 @@ def main():
                                                                     threshold=0.4, ratio=0.8,
                                                                     attack=0.99, release=0.9975)
 
-    fig = plt.figure(figsize=(5, 5), dpi=300)
-    ax1 = fig.add_subplot(111)
+    fig = plt.figure(figsize=(6, 6), dpi=200)
+    ax = fig.add_subplot(111)
 
-    ax1.plot(t, input_signal, '-', color='tab:blue', label='Input')
-    ax1.plot(t, output_signal, '-', color='tab:orange', label='Output')
-    ax1.legend()
+    ax.plot(t, input_signal, '-', color='tab:blue', label='Input')
+    ax.plot(t, output_signal, '-', color='tab:orange', label='Output')
+    ax.set_xlabel('Time (s)')
+    ax.set_ylabel('Signal')
+    ax.legend()
 
     plt.show()
 
