@@ -34,8 +34,11 @@ ImageOperationPluginManager::ImageOperationPluginManager()
             std::string moduleName = std::string(PLUGIN_FOLDER) + "." + pluginFile.baseName().toStdString();
             py::module operationModule = py::module::import(moduleName.c_str());
 
-            m_operationNames.append(operationModule.attr("name")().cast<std::string>().c_str());
-            m_operationFunctions.append(operationModule.attr("process").cast<ProcessFunction>());
+            QString name = operationModule.attr("name")().cast<std::string>().c_str();
+            auto operationFunction = operationModule.attr("process").cast<ProcessFunction>();
+
+            m_operationNames.append(name);
+            m_operationFunctions.append(operationFunction);
         }
         catch (py::error_already_set& e)
         {
