@@ -1,12 +1,14 @@
 import time
+from typing import List, Callable, Tuple
 
 import numpy as np
+from numba import njit
 import matplotlib.pyplot as plt
 
 import mamaheux_signal_processing_cpp
 
 
-def compute_signal_statistics_python(signal):
+def compute_signal_statistics_python(signal: np.ndarray) -> mamaheux_signal_processing_cpp.SignalStatistics:
     if len(signal.shape) != 1:
         raise ValueError('The signal should have only one dimension.')
 
@@ -27,7 +29,7 @@ def compute_signal_statistics_python(signal):
     return mamaheux_signal_processing_cpp.SignalStatistics(min_value, max_value, mean_value)
 
 
-def compute_signal_statistics_numpy(signal):
+def compute_signal_statistics_numpy(signal: np.ndarray) -> mamaheux_signal_processing_cpp.SignalStatistics:
     if len(signal.shape) != 1:
         raise ValueError('The signal should have only one dimension.')
 
@@ -38,7 +40,38 @@ def compute_signal_statistics_numpy(signal):
     return mamaheux_signal_processing_cpp.SignalStatistics(min_value, max_value, mean_value)
 
 
-def bench(signals, function):
+def compute_signal_statistics_numba(signal: np.ndarray) -> mamaheux_signal_processing_cpp.SignalStatistics:
+    if len(signal.shape) != 1:
+        raise ValueError('The signal should have only one dimension.')
+
+    min_value, max_value, mean_value = _compute_signal_statistics_numba_internal(signal)
+    return mamaheux_signal_processing_cpp.SignalStatistics(min_value, max_value, mean_value)
+
+
+@njit
+def _compute_signal_statistics_numba_internal(signal: np.ndarray) -> Tuple[float, float, float]:
+    type_info = np.finfo(signal.dtype)
+    min_value = type_info.max
+    max_value = type_info.min
+    mean_value = 0.0
+
+    for v in signal:
+        if v < min_value:
+            min_value = v
+        if v > max_value:
+            max_value = v
+
+        mean_value += v
+
+    mean_value /= signal.shape[0]
+
+    return min_value, max_value, mean_value
+
+
+def bench(signals: np.ndarray, function: Callable) -> List[float]:
+    if len(signals) > 0:
+        function(signals[0]) # Warm up
+
     N = 100
     durations = []
 
@@ -65,6 +98,9 @@ def main():
     duration_numpy = bench(signals, compute_signal_statistics_numpy)
     ax.plot(sizes, duration_numpy, '-', label='Numpy')
 
+    duration_numba = bench(signals, compute_signal_statistics_numba)
+    ax.plot(sizes, duration_numba, '-', label='Numba')
+
     duration_cpp = bench(signals, mamaheux_signal_processing_cpp.compute_signal_statistics)
     ax.plot(sizes, duration_cpp, '-', label='C++')
     if hasattr(mamaheux_signal_processing_cpp, 'compute_signal_statistics_simd'):
@@ -77,6 +113,7 @@ def main():
     ax.set_ylabel('Duration (s)')
     ax.grid(True, which='both')
     plt.show()
+
 
 if __name__ == "__main__":
     main()
